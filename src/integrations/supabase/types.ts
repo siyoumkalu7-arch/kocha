@@ -14,16 +14,145 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      entries: {
+        Row: {
+          bonus: number
+          cash: number
+          created_at: string
+          entry_date: string
+          id: string
+          note: string | null
+          number: number
+          online: number
+          system: number
+          updated_at: string
+          user_id: string
+          win: number
+        }
+        Insert: {
+          bonus?: number
+          cash?: number
+          created_at?: string
+          entry_date?: string
+          id?: string
+          note?: string | null
+          number?: number
+          online?: number
+          system?: number
+          updated_at?: string
+          user_id: string
+          win?: number
+        }
+        Update: {
+          bonus?: number
+          cash?: number
+          created_at?: string
+          entry_date?: string
+          id?: string
+          note?: string | null
+          number?: number
+          online?: number
+          system?: number
+          updated_at?: string
+          user_id?: string
+          win?: number
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          read: boolean
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          sender_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          can_edit: boolean
+          created_at: string
+          id: string
+          parent_admin_id: string | null
+          username: string
+        }
+        Insert: {
+          can_edit?: boolean
+          created_at?: string
+          id: string
+          parent_admin_id?: string | null
+          username: string
+        }
+        Update: {
+          can_edit?: boolean
+          created_at?: string
+          id?: string
+          parent_admin_id?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_parent_admin_id_fkey"
+            columns: ["parent_admin_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_user_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      get_parent_admin: { Args: { _user_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "super_admin" | "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +279,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["super_admin", "admin", "user"],
+    },
   },
 } as const
