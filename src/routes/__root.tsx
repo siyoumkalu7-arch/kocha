@@ -63,7 +63,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "viewport",
         content: "width=device-width, initial-scale=1, viewport-fit=cover",
       },
-      { title: "Ledger — Betting Data Entry" },
+      { title: "Bet Entry — Betting Data Entry" },
       {
         name: "description",
         content: "Role-based betting data entry and reporting dashboard.",
@@ -71,7 +71,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#0d7a5f" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "Ledger" },
+      { name: "apple-mobile-web-app-title", content: "Bet Entry" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
