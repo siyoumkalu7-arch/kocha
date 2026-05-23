@@ -17,10 +17,10 @@ import { Button } from "./ui/button";
 type Item = { title: string; url: string; icon: typeof Users; roles: AppRole[] };
 
 const items: Item[] = [
-  { title: "Dashboard", url: "/app/dashboard", icon: LayoutDashboard, roles: ["super_admin", "admin", "user"] },
-  { title: "My Entries", url: "/app/entries", icon: FileSpreadsheet, roles: ["user"] },
-  { title: "Users", url: "/app/users", icon: Users, roles: ["super_admin", "admin"] },
-  { title: "Messages", url: "/app/messages", icon: MessageSquare, roles: ["super_admin", "admin"] },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, roles: ["super_admin", "admin", "user"] },
+  { title: "My Entries", url: "/entries", icon: FileSpreadsheet, roles: ["user"] },
+  { title: "Users", url: "/users", icon: Users, roles: ["super_admin", "admin"] },
+  { title: "Messages", url: "/messages", icon: MessageSquare, roles: ["super_admin", "admin"] },
 ];
 
 export function AppSidebar() {

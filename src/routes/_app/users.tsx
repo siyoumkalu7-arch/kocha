@@ -65,7 +65,7 @@ function UsersPage() {
 
   useEffect(() => {
     if (!loading && role && role !== "admin" && role !== "super_admin") {
-      nav({ to: "/app/dashboard" });
+      nav({ to: "/dashboard" });
     }
   }, [role, loading, nav]);
 

@@ -56,7 +56,7 @@ function EntriesPage() {
   const [editForm, setEditForm] = useState<ReturnType<typeof emptyForm>>(emptyForm());
 
   useEffect(() => {
-    if (!loading && role && role !== "user") nav({ to: "/app/dashboard" });
+    if (!loading && role && role !== "user") nav({ to: "/dashboard" });
   }, [loading, role, nav]);
 
   const load = async () => {
