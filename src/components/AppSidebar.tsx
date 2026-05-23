@@ -36,7 +36,7 @@ export function AppSidebar() {
             ₿
           </div>
           <div className="min-w-0">
-            <div className="font-semibold text-sm truncate">Ledger</div>
+            <div className="font-semibold text-sm truncate">Bet Entry</div>
             <div className="text-xs text-muted-foreground truncate">
               {profile?.username} · {role?.replace("_", " ")}
             </div>
