@@ -88,13 +88,13 @@ function Dashboard() {
 
       <div className="grid gap-4 md:grid-cols-2">
         {role === "user" && (
-          <QuickLink to="/app/entries" title="Submit new entry" desc="Add today's numbers" />
+          <QuickLink to="/entries" title="Submit new entry" desc="Add today's numbers" />
         )}
         {role !== "user" && (
-          <QuickLink to="/app/users" title="Manage users" desc="Create, delete, reset" />
+          <QuickLink to="/users" title="Manage users" desc="Create, delete, reset" />
         )}
         {role !== "user" && (
-          <QuickLink to="/app/messages" title="Messages" desc={role === "super_admin" ? "Read inbox" : "Message super admin"} />
+          <QuickLink to="/messages" title="Messages" desc={role === "super_admin" ? "Read inbox" : "Message super admin"} />
         )}
       </div>
     </div>

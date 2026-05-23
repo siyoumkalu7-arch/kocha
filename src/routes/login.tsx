@@ -20,7 +20,7 @@ function LoginPage() {
   const [needsSetup, setNeedsSetup] = useState(false);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/app/dashboard" });
+    if (!loading && session) navigate({ to: "/dashboard" });
   }, [session, loading, navigate]);
 
   // Detect if there's any super_admin yet (so we can prompt /setup)
@@ -40,7 +40,7 @@ function LoginPage() {
     try {
       await signIn(username, password);
       toast.success("Welcome back");
-      navigate({ to: "/app/dashboard" });
+      navigate({ to: "/dashboard" });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Login failed";
       toast.error(msg.includes("Invalid") ? "Invalid username or password" : msg);

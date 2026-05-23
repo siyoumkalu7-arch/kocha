@@ -30,7 +30,7 @@ function MessagesPage() {
 
   useEffect(() => {
     if (!loading && role !== "admin" && role !== "super_admin") {
-      nav({ to: "/app/dashboard" });
+      nav({ to: "/dashboard" });
     }
   }, [role, loading, nav]);
 
