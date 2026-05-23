@@ -56,7 +56,7 @@ function LoginPage() {
           <div className="mx-auto h-12 w-12 rounded-xl gradient-emerald grid place-items-center text-white font-bold text-xl shadow-lg">
             ₿
           </div>
-          <h1 className="mt-4 text-2xl font-semibold tracking-tight">Ledger</h1>
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight">Bet Entry</h1>
           <p className="text-sm text-muted-foreground mt-1">Sign in to your dashboard</p>
         </div>
 
