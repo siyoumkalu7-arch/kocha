@@ -1,13 +1,17 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { bootstrapSuperAdmin } from "@/lib/admin.functions";
+import { bootstrapSuperAdmin, superAdminExists } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/setup")({
+  beforeLoad: async () => {
+    const { exists } = await superAdminExists();
+    if (exists) throw redirect({ to: "/login" });
+  },
   component: SetupPage,
 });
 
