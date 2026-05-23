@@ -18,6 +18,15 @@ async function getCallerRole(userId: string): Promise<"super_admin" | "admin" | 
   return null;
 }
 
+/* ============ SETUP STATUS ============ */
+export const superAdminExists = createServerFn({ method: "GET" }).handler(async () => {
+  const { count } = await supabaseAdmin
+    .from("user_roles")
+    .select("*", { count: "exact", head: true })
+    .eq("role", "super_admin");
+  return { exists: (count ?? 0) > 0 };
+});
+
 /* ============ BOOTSTRAP ============ */
 /** Create the first super admin. Only works if NO super_admin exists. Public on purpose. */
 export const bootstrapSuperAdmin = createServerFn({ method: "POST" })
