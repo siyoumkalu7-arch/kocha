@@ -123,6 +123,11 @@ export const deleteAccount = createServerFn({ method: "POST" })
       throw new Error("Can only delete users you created");
     }
 
+    // Clean up app data first (no FK cascade from auth.users)
+    await supabaseAdmin.from("entries").delete().eq("user_id", data.userId);
+    await supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId);
+    await supabaseAdmin.from("profiles").delete().eq("id", data.userId);
+
     const { error } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
     if (error) throw new Error(error.message);
     return { ok: true };
