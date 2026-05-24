@@ -18,6 +18,25 @@ async function getCallerRole(userId: string): Promise<"super_admin" | "admin" | 
   return null;
 }
 
+async function listExistingAuthUserIds(): Promise<Set<string>> {
+  const ids = new Set<string>();
+  let page = 1;
+
+  while (true) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({
+      page,
+      perPage: 1000,
+    });
+    if (error) throw new Error(error.message);
+
+    data.users.forEach((user) => ids.add(user.id));
+    if (data.users.length < 1000) break;
+    page += 1;
+  }
+
+  return ids;
+}
+
 /* ============ SETUP STATUS ============ */
 export const superAdminExists = createServerFn({ method: "GET" }).handler(async () => {
   const { count } = await supabaseAdmin
@@ -124,12 +143,19 @@ export const deleteAccount = createServerFn({ method: "POST" })
     }
 
     // Clean up app data first (no FK cascade from auth.users)
-    await supabaseAdmin.from("entries").delete().eq("user_id", data.userId);
-    await supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId);
-    await supabaseAdmin.from("profiles").delete().eq("id", data.userId);
+    const cleanup = await Promise.all([
+      supabaseAdmin.from("entries").delete().eq("user_id", data.userId),
+      supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId),
+      supabaseAdmin.from("profiles").delete().eq("id", data.userId),
+    ]);
+    const cleanupError = cleanup.find((result) => result.error)?.error;
+    if (cleanupError) throw new Error(cleanupError.message);
 
     const { error } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
-    if (error) throw new Error(error.message);
+    const authDeleteStatus = (error as { status?: number } | null)?.status;
+    if (error && authDeleteStatus !== 404 && !error.message.toLowerCase().includes("not found")) {
+      throw new Error(error.message);
+    }
     return { ok: true };
   });
 
@@ -180,15 +206,16 @@ export const listAccounts = createServerFn({ method: "GET" })
     const { data: profiles, error } = await q;
     if (error) throw new Error(error.message);
 
-    const { data: roles } = await supabaseAdmin
-      .from("user_roles")
-      .select("user_id, role");
+    const [authUserIds, { data: roles }] = await Promise.all([
+      listExistingAuthUserIds(),
+      supabaseAdmin.from("user_roles").select("user_id, role"),
+    ]);
     const roleMap = new Map<string, string>();
     (roles ?? []).forEach((r: { user_id: string; role: string }) =>
       roleMap.set(r.user_id, r.role),
     );
 
-    return (profiles ?? []).map((p) => ({
+    return (profiles ?? []).filter((p) => authUserIds.has(p.id)).map((p) => ({
       ...p,
       role: (roleMap.get(p.id) ?? "user") as "super_admin" | "admin" | "user",
     }));
