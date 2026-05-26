@@ -215,8 +215,12 @@ export const listAccounts = createServerFn({ method: "GET" })
       roleMap.set(r.user_id, r.role),
     );
 
-    return (profiles ?? []).filter((p) => authUserIds.has(p.id)).map((p) => ({
-      ...p,
-      role: (roleMap.get(p.id) ?? "user") as "super_admin" | "admin" | "user",
-    }));
+    return (profiles ?? [])
+      .filter((p) => authUserIds.has(p.id))
+      .map((p) => ({
+        ...p,
+        role: (roleMap.get(p.id) ?? "user") as "super_admin" | "admin" | "user",
+      }))
+      // Admins must never see super_admin accounts in their list
+      .filter((p) => (caller === "admin" ? p.role !== "super_admin" : true));
   });
